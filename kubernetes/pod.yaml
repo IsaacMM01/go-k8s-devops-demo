@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-go-pod
+spec:
+  containers:
+  - name: my-go-container
+    image: my-go-app:latest
+    imagePullPolicy: Never
+    ports:
+    - containerPort: 8080
+

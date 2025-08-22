@@ -1,0 +1,51 @@
+name: Application GO CI/CD Pipeline
+
+on:
+  push: 
+  branches:
+    - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '^1.24.6'
+        run: go version
+
+      - name: Build go
+        run: go build app.go
+
+  docker-build:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        run: echo "${{secrets.DOCKER_PASSWORD}}" | docker login -u "${{secrets.DOCKER_USERNAME}}" --password-stdin
+
+      - name: Build and Push Docker Image
+        run: | 
+          docker build -t my-app-go:latest .
+          docker tag my-app-go:latest isaacmm123/my-app-go:latest
+          docker push isaacmm123/my-app-go:latest
+  deploy:
+    needs: docker-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Apply kubernetes Deployment
+        run: |
+          kubectl apply -f deployment.yaml
+          kubectl rollout restart deployment my-app-go
+

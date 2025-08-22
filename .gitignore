@@ -1,0 +1,32 @@
+# Archivos de estado de Terraform (¡NUNCA subirlos!)
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Archivos de bloqueo y caché
+.terraform.lock.hcl
+.terraform/
+terraform.tfstate.d/
+
+# Variables sensibles (ej: archivos con contraseñas)
+*.tfvars
+*.tfvars.json
+
+# Planes de ejecución
+*.tfplan
+
+# Logs de Terraform
+terraform.log
+
+# Directorio de módulos descargados
+.terraform/modules/
+
+# Archivos de override (opcional)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Entornos locales (ej: .env)
+.env
+.venv/
