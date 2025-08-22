@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app-go-deployment
+spec: 
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: my-app-go
+  template:
+    metadata:
+      labels:
+        app: my-app-go
+    spec:
+      containers:
+      - name: my-app-go
+        image: isaacmm123/my-app-go:latest
+        ports:
+        - containerPort: 8080
+
